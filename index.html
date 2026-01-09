@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ================================================
+         POMODORO TIMER - A Beautiful Productivity App
+         ================================================ -->
+    
+    <!-- Character encoding and viewport -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Theme colors for browser UI -->
+    <meta name="theme-color" content="#0f0f1a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+    
+    <!-- PWA support for mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- SEO -->
+    <meta name="description" content="A beautiful Pomodoro Timer to boost your productivity">
+    <title>Pomodoro Timer</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background texture -->
+    <div class="noise-overlay"></div>
+    
+    <!-- ========== GLOBAL CONTROLS ========== -->
+    
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+    
+    <!-- Sound Toggle -->
+    <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+        <svg class="sound-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+    </button>
+    
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="container">
+        <!-- Decorative elements -->
+        <div class="ambient-glow"></div>
+        <div class="floating-shapes"><span></span><span></span><span></span></div>
+        
+        <!-- Header -->
+        <header>
+            <div class="logo">🍅</div>
+            <h1>Pomodoro</h1>
+            <p class="subtitle">Focus. Rest. Repeat.</p>
+            <div class="status-badge">
+                <span class="badge-dot"></span>
+                <span id="statusBadge">Ready to boost productivity</span>
+            </div>
+        </header>
+
+        <!-- Session Counter -->
+        <section class="session-counter">
+            <span class="counter-icon">🏆</span>
+            <div class="counter-info">
+                <span class="counter-label">Sessions Completed</span>
+                <span class="counter-value" id="sessionCount">0</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="dailyProgress"></div>
+            </div>
+        </section>
+
+        <!-- Timer Card -->
+        <section class="timer-card">
+            <!-- Mode Tabs -->
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="work">💼 Work</button>
+                <button class="mode-tab" data-mode="break">☕ Break</button>
+            </div>
+
+            <!-- Timer Display -->
+            <div class="timer-display">
+                <svg class="progress-ring" viewBox="0 0 200 200">
+                    <circle class="ring-bg" cx="100" cy="100" r="90"/>
+                    <circle class="ring-progress" cx="100" cy="100" r="90" id="progressRing"/>
+                </svg>
+                <div class="timer-content">
+                    <span class="mode-label" id="modeLabel">FOCUS</span>
+                    <div class="time">
+                        <span id="minutes">25</span>:<span id="seconds">00</span>
+                    </div>
+                    <span class="time-hint">minutes remaining</span>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <p class="status-text" id="statusText">Ready to focus?</p>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="btn secondary" id="resetBtn" aria-label="Reset">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+                    </svg>
+                </button>
+                <button class="btn primary" id="startPauseBtn" aria-label="Start">
+                    <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                    <svg class="pause-icon hidden" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+                    </svg>
+                </button>
+                <button class="btn secondary" id="skipBtn" aria-label="Skip">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5,4 15,12 5,20"/><rect x="15" y="4" width="4" height="16"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Settings -->
+        <details class="settings-card" open>
+            <summary>
+                <span>⚙️ Settings</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </summary>
+            <div class="settings-content">
+                <div class="settings-grid">
+                    <label class="setting">
+                        <span>💼 Work</span>
+                        <div class="input-group">
+                            <input type="number" id="workDuration" value="25" min="1" max="120">
+                            <span>min</span>
+                        </div>
+                    </label>
+                    <label class="setting">
+                        <span>☕ Break</span>
+                        <div class="input-group">
+                            <input type="number" id="breakDuration" value="5" min="1" max="60">
+                            <span>min</span>
+                        </div>
+                    </label>
+                </div>
+                <button class="btn apply" id="applySettings">Apply Changes ✓</button>
+            </div>
+        </details>
+
+        <!-- Stats -->
+        <section class="stats">
+            <div class="stat-card">
+                <span>🎯</span>
+                <div>
+                    <span class="stat-label">Today's Focus</span>
+                    <span class="stat-value" id="todayFocus">0 min</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <span>🔥</span>
+                <div>
+                    <span class="stat-label">Streak</span>
+                    <span class="stat-value" id="currentStreak">0</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
