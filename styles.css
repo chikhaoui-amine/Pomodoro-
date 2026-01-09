@@ -232,6 +232,7 @@ header h1 {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     backdrop-filter: blur(20px);
+    box-shadow: var(--shadow);
 }
 
 .counter-icon {
@@ -497,6 +498,7 @@ body.break-mode .btn.primary {
     margin-bottom: 20px;
     backdrop-filter: blur(20px);
     overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
 .settings-card summary {
@@ -507,6 +509,11 @@ body.break-mode .btn.primary {
     cursor: pointer;
     font-weight: 600;
     list-style: none;
+    transition: background 0.2s ease;
+}
+
+.settings-card summary:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .settings-card summary::-webkit-details-marker {
@@ -612,6 +619,12 @@ body.break-mode .btn.apply {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     backdrop-filter: blur(20px);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
 }
 
 .stat-card > span {
@@ -736,9 +749,13 @@ body.light-mode .theme-toggle .moon-icon {
    ================================================ */
 
 /* Tablets */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
+    body {
+        padding: 24px;
+    }
+    
     .container {
-        max-width: 480px;
+        max-width: 500px;
     }
     
     .timer-display {
@@ -749,26 +766,127 @@ body.light-mode .theme-toggle .moon-icon {
     .time {
         font-size: 4rem;
     }
+    
+    .btn.primary {
+        width: 76px;
+        height: 76px;
+    }
+    
+    .btn.secondary {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .session-counter {
+        padding: 18px;
+    }
+    
+    .counter-value {
+        font-size: 1.75rem;
+    }
+    
+    .stat-card {
+        padding: 18px;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
+    }
 }
 
 /* Desktop */
 @media (min-width: 1024px) {
+    body {
+        padding: 40px;
+    }
+    
     .container {
-        max-width: 900px;
+        max-width: 1000px;
         display: grid;
-        grid-template-columns: 1fr 1.2fr 1fr;
+        grid-template-columns: minmax(250px, 1fr) minmax(340px, 1.3fr) minmax(250px, 1fr);
         grid-template-rows: auto auto auto;
-        gap: 24px;
+        gap: 28px;
         align-items: start;
     }
     
-    header { grid-column: 1 / -1; }
-    .session-counter { grid-column: 1 / -1; }
-    .timer-card { grid-column: 2; grid-row: 3; }
-    .settings-card { grid-column: 1; grid-row: 3; }
-    .stats { grid-column: 3; grid-row: 3; grid-template-columns: 1fr; }
+    header { 
+        grid-column: 1 / -1;
+        margin-bottom: 8px;
+    }
+    
+    .session-counter { 
+        grid-column: 1 / -1;
+        max-width: 600px;
+        margin: 0 auto 8px;
+        width: 100%;
+    }
+    
+    .timer-card { 
+        grid-column: 2; 
+        grid-row: 3;
+        margin-bottom: 0;
+        padding: 32px 28px;
+    }
+    
+    .settings-card { 
+        grid-column: 1; 
+        grid-row: 3;
+        margin-bottom: 0;
+        height: fit-content;
+    }
+    
+    .stats { 
+        grid-column: 3; 
+        grid-row: 3; 
+        grid-template-columns: 1fr;
+        gap: 16px;
+        height: fit-content;
+    }
+    
+    .timer-display {
+        width: 240px;
+        height: 240px;
+    }
+    
+    .time {
+        font-size: 3.8rem;
+    }
     
     .floating-shapes { display: none; }
+    
+    .stat-card {
+        padding: 18px;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1100px;
+        grid-template-columns: minmax(280px, 1fr) minmax(380px, 1.4fr) minmax(280px, 1fr);
+        gap: 32px;
+    }
+    
+    .session-counter {
+        max-width: 650px;
+    }
+    
+    .timer-display {
+        width: 260px;
+        height: 260px;
+    }
+    
+    .time {
+        font-size: 4rem;
+    }
+    
+    .timer-card {
+        padding: 36px 32px;
+    }
 }
 
 /* Mobile Phones */
@@ -776,7 +894,7 @@ body.light-mode .theme-toggle .moon-icon {
     body {
         padding: 12px;
         align-items: flex-start;
-        padding-top: max(60px, env(safe-area-inset-top));
+        padding-top: max(70px, env(safe-area-inset-top, 12px) + 60px);
     }
     
     .container {
@@ -786,48 +904,209 @@ body.light-mode .theme-toggle .moon-icon {
     .theme-toggle,
     .sound-toggle {
         top: max(12px, env(safe-area-inset-top));
+        width: 40px;
+        height: 40px;
     }
     
     .theme-toggle { right: 12px; }
-    .sound-toggle { right: 64px; }
+    .sound-toggle { right: 58px; }
     
-    .floating-shapes { display: none; }
-    
-    header h1 { font-size: 1.6rem; }
-    .logo { font-size: 2.5rem; }
-    
-    .timer-display {
-        width: 200px;
-        height: 200px;
+    .theme-toggle svg,
+    .sound-toggle svg {
+        width: 18px;
+        height: 18px;
     }
     
-    .time { font-size: 3rem; }
+    .floating-shapes { display: none; }
+    .ambient-glow { display: none; }
+    
+    header {
+        margin-bottom: 16px;
+    }
+    
+    header h1 { font-size: 1.5rem; }
+    .logo { font-size: 2.2rem; margin-bottom: 4px; }
+    .subtitle { font-size: 0.8rem; margin-bottom: 8px; }
+    
+    .status-badge {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+    }
+    
+    .session-counter {
+        padding: 12px;
+        margin-bottom: 16px;
+        gap: 10px;
+    }
+    
+    .counter-icon { font-size: 1.2rem; }
+    .counter-value { font-size: 1.25rem; }
+    .counter-label { font-size: 0.65rem; }
+    
+    .timer-card {
+        padding: 20px 16px;
+        margin-bottom: 16px;
+    }
+    
+    .mode-tabs {
+        margin-bottom: 16px;
+    }
+    
+    .mode-tab {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    
+    .timer-display {
+        width: 180px;
+        height: 180px;
+        margin-bottom: 16px;
+    }
+    
+    .time { font-size: 2.8rem; }
+    .mode-label { font-size: 0.6rem; letter-spacing: 2px; }
+    .time-hint { font-size: 0.65rem; }
+    
+    .status-text {
+        font-size: 0.8rem;
+        margin-bottom: 16px;
+    }
+    
+    .controls {
+        gap: 12px;
+    }
     
     .btn.primary {
-        width: 68px;
-        height: 68px;
+        width: 64px;
+        height: 64px;
+    }
+    
+    .btn.primary svg {
+        width: 24px;
+        height: 24px;
     }
     
     .btn.secondary {
-        width: 48px;
-        height: 48px;
+        width: 46px;
+        height: 46px;
+    }
+    
+    .btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .settings-card {
+        margin-bottom: 16px;
+    }
+    
+    .settings-card summary {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    
+    .settings-content {
+        padding: 0 12px 12px;
+    }
+    
+    .settings-grid {
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .setting {
+        font-size: 0.75rem;
+    }
+    
+    .input-group input {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .input-group span {
+        padding: 0 10px;
+        font-size: 0.75rem;
+    }
+    
+    .btn.apply {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+    
+    .stats {
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .stat-card > span {
+        font-size: 1.1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.6rem;
+    }
+    
+    .stat-value {
+        font-size: 0.9rem;
+    }
+    
+    .toast {
+        bottom: 20px;
+        padding: 12px 18px;
+        font-size: 0.85rem;
+        max-width: calc(100vw - 24px);
     }
 }
 
 /* Extra small phones */
 @media (max-width: 360px) {
-    .timer-display {
-        width: 180px;
-        height: 180px;
+    body {
+        padding: 10px;
+        padding-top: max(65px, env(safe-area-inset-top, 10px) + 55px);
     }
     
-    .time { font-size: 2.6rem; }
+    header h1 { font-size: 1.3rem; }
+    .logo { font-size: 2rem; }
+    .subtitle { font-size: 0.75rem; }
     
-    header h1 { font-size: 1.4rem; }
+    .timer-display {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .time { font-size: 2.4rem; }
+    
+    .btn.primary {
+        width: 58px;
+        height: 58px;
+    }
+    
+    .btn.secondary {
+        width: 42px;
+        height: 42px;
+    }
     
     .stat-card {
-        padding: 12px;
+        padding: 10px;
         gap: 8px;
+    }
+    
+    .stat-card > span {
+        font-size: 1rem;
+    }
+    
+    .session-counter {
+        padding: 10px;
+    }
+    
+    .counter-value { font-size: 1.1rem; }
+    
+    .timer-card {
+        padding: 16px 12px;
     }
 }
 
